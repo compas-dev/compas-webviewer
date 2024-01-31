@@ -1,4 +1,12 @@
 <template>
+  <v-toolbar class="bg-white">
+    <img src="../assets/compas_logo_blue.png" width="48px" class="mx-2" />
+    <v-toolbar-title> COMPAS WebViewer </v-toolbar-title>
+    <v-btn @click="ping" variant="elevated" class="mx-2"> Ping </v-btn>
+    <v-btn @click="boxToSubdividedMesh" variant="elevated" class="mx-2">
+      Box SubD
+    </v-btn>
+  </v-toolbar>
   <v-container class="pa-0 ma-0">
     <v-row no-gutters>
       <v-col cols="12" class="pa-0 ma-0">
@@ -12,17 +20,35 @@
       </v-col>
     </v-row>
   </v-container>
+  <v-dialog v-model="dialog.visible" width="480">
+    <v-card>
+      <v-card-title>{{ dialog.title }}</v-card-title>
+      <v-card-text>{{ dialog.text }}</v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" text @click="dialog.visible = false">
+          Close
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import compas from "@/api/compas";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xeeeeee);
 
 export default {
   data: () => ({
+    dialog: {
+      visible: false,
+      title: "",
+      text: "",
+    },
     removeFromTop: 64,
     contentHeight: window.innerHeight - 64,
     config: {
@@ -105,13 +131,53 @@ export default {
     setSceneBackground(color) {
       scene.background = new THREE.Color(color);
     },
+
+    addMesh(vertices, edges, faces) {
+      const positions = new THREE.Float32BufferAttribute(vertices, 3);
+
+      const meshgeometry = new THREE.BufferGeometry();
+      meshgeometry.setAttribute("position", positions);
+      meshgeometry.setIndex(faces);
+      const meshmaterial = new THREE.MeshBasicMaterial({ color: 0xcccccc });
+      const mesh = new THREE.Mesh(meshgeometry, meshmaterial);
+
+      const linegeometry = new THREE.BufferGeometry();
+      linegeometry.setAttribute("position", positions);
+      linegeometry.setIndex(edges);
+      const linematerial = new THREE.LineBasicMaterial({ color: 0x888888 });
+      const line = new THREE.LineSegments(linegeometry, linematerial);
+
+      scene.add(mesh);
+      scene.add(line);
+    },
+
+    showDialog(title, text) {
+      this.dialog.visible = true;
+      this.dialog.title = title;
+      this.dialog.text = text;
+    },
+
+    ping() {
+      compas.ping().then((response) => {
+        console.log(response);
+        this.showDialog("Info", `ping says: ${response}`);
+      });
+    },
+
+    boxToSubdividedMesh() {
+      compas
+        .boxToSubdividedMesh({ xsize: 1, ysize: 1, zsize: 1 })
+        .then((response) => {
+          console.log(response);
+          this.showDialog("Info", `boxToSubdividedMesh says: ${response}`);
+          this.addMesh(response.vertices, response.edges, response.faces);
+        });
+    },
   },
 
   mounted() {
     this.initThree();
     this.addGrid();
-    this.addAxes();
-    this.addBox();
   },
 };
 </script>
