@@ -1,0 +1,27 @@
+{
+  "name": "compas-webviewer",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "node --no-warnings ./node_modules/.bin/vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mdi/font": "7.0.96",
+    "axios": "^1.6.7",
+    "roboto-fontface": "*",
+    "three": "^0.161.0",
+    "vue": "^3.3.0",
+    "vue-router": "4",
+    "vuetify": "^3.0.0",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.5.0",
+    "sass": "^1.69.0",
+    "unplugin-fonts": "^1.1.0",
+    "unplugin-vue-components": "^0.26.0",
+    "vite": "^5.0.0",
+    "vite-plugin-vuetify": "^2.0.0"
+  }
+}
