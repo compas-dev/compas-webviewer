@@ -37,3 +37,5 @@ python server.py
 
 The viewer is available at [http://localhost:3000](http://localhost:3000).
 It has a few buttons that run some basic functions on the server and visualise the result in the ThreeJS CAD environment.
+
+The "Getting Started" button runs the code from the corresponding example on the COMPAS main website: [Getting Started](https://tomvanmele.github.io/compas2.dev/#/gettingstarted).
