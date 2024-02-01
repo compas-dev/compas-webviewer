@@ -2,10 +2,14 @@
   <v-toolbar class="bg-white">
     <img src="../assets/compas_logo_blue.png" width="48px" class="mx-2" />
     <v-toolbar-title> COMPAS WebViewer </v-toolbar-title>
-    <v-btn @click="ping" variant="elevated" class="mx-2"> Ping </v-btn>
-    <v-btn @click="boxToSubdividedMesh" variant="elevated" class="mx-2">
-      Box SubD
+    <v-btn @click="ping" variant="elevated" class="mx-1"> Ping </v-btn>
+    <v-btn @click="boxToSubdividedMesh" variant="elevated" class="mx-1">
+      Getting Started
     </v-btn>
+    <v-btn @click="loadTubemesh" variant="elevated" class="mx-1">
+      Tubemesh
+    </v-btn>
+    <v-btn @click="loadBunny" variant="elevated" class="mx-1"> Bunny </v-btn>
   </v-toolbar>
   <v-container class="pa-0 ma-0">
     <v-row no-gutters>
@@ -128,17 +132,16 @@ export default {
       scene.add(grid);
     },
 
-    setSceneBackground(color) {
-      scene.background = new THREE.Color(color);
-    },
-
     addMesh(vertices, edges, faces) {
       const positions = new THREE.Float32BufferAttribute(vertices, 3);
 
       const meshgeometry = new THREE.BufferGeometry();
       meshgeometry.setAttribute("position", positions);
       meshgeometry.setIndex(faces);
-      const meshmaterial = new THREE.MeshBasicMaterial({ color: 0xcccccc });
+      const meshmaterial = new THREE.MeshBasicMaterial({
+        color: 0xcccccc,
+        side: THREE.DoubleSide,
+      });
       const mesh = new THREE.Mesh(meshgeometry, meshmaterial);
 
       const linegeometry = new THREE.BufferGeometry();
@@ -159,7 +162,7 @@ export default {
 
     ping() {
       compas.ping().then((response) => {
-        console.log(response);
+        // console.log(response);
         this.showDialog("Info", `ping says: ${response}`);
       });
     },
@@ -168,10 +171,23 @@ export default {
       compas
         .boxToSubdividedMesh({ xsize: 1, ysize: 1, zsize: 1 })
         .then((response) => {
-          console.log(response);
-          this.showDialog("Info", `boxToSubdividedMesh says: ${response}`);
+          // console.log(response);
           this.addMesh(response.vertices, response.edges, response.faces);
         });
+    },
+
+    loadTubemesh() {
+      compas.loadTubemesh().then((response) => {
+        // console.log(response);
+        this.addMesh(response.vertices, response.edges, response.faces);
+      });
+    },
+
+    loadBunny() {
+      compas.loadBunny().then((response) => {
+        // console.log(response);
+        this.addMesh(response.vertices, response.edges, response.faces);
+      });
     },
   },
 

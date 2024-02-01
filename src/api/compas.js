@@ -16,4 +16,14 @@ export default {
     });
     return response.data;
   },
+
+  async loadTubemesh() {
+    let response = await axios.get(HOST + "/load_tubemesh");
+    return response.data;
+  },
+
+  async loadBunny() {
+    let response = await axios.get(HOST + "/load_bunny");
+    return response.data;
+  },
 };
