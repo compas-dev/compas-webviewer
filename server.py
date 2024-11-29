@@ -7,7 +7,7 @@ from pydantic import BaseModel
 import compas
 from compas.geometry import Box
 from compas.datastructures import Mesh
-from compas.utilities import flatten
+from compas.itertools import flatten
 
 
 app = FastAPI()
