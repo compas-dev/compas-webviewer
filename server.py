@@ -3,6 +3,7 @@ from typing import List
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 import compas
 from compas.geometry import Box
@@ -11,6 +12,18 @@ from compas.itertools import flatten
 
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",  # Frontend origin
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class BoxInput(BaseModel):
