@@ -1,3 +1,6 @@
+> [!WARNING]
+> **DEPRECATED: please use [compas_threejs](https://github.com/compas-dev/compas_threejs) instead.**
+
 # COMPAS WebViewer
 
 This repo provides a basic Vue + ThreeJS + FastAPI setup for experimenting with COMPAS in the browser.
